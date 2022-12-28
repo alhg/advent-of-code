@@ -17,6 +17,8 @@ fn get_priority(item: char) -> i32 {
     }
 }
 
+// Main idea behind part 1 & 2 solution is to get set of characters from the split string, then get the intersection
+// of the sets which will be the common char and then convert the char according to priority formula.
 fn main() {
     let input = read_to_string("../input.txt").expect("File cannot be opened.");
     let compartments_tuple = input
@@ -34,5 +36,21 @@ fn main() {
     }
     println!("Day 3");
     println!("==============================");
-    println!("The sum of the priorities is: {priority_sum}");
+    println!("Part 1 - The sum of the priorities is: {priority_sum}");
+
+    let lines: Vec<&str> = input.split("\n").collect();
+    let mut i = 0;
+    let mut group_priority_sum = 0;
+    while i < lines.len() {
+        let l1: HashSet<char> = lines[i].chars().collect();
+        let l2: HashSet<char> = lines[i + 1].chars().collect();
+        let l3: HashSet<char> = lines[i + 2].chars().collect();
+
+        let intersection = &(&l1 & &l2) & &l3;
+        for same_item in intersection {
+            group_priority_sum += get_priority(same_item.clone())
+        }
+        i += 3;
+    }
+    println!("Part 2 - The sum of the group badges priorities is: {group_priority_sum}");
 }
